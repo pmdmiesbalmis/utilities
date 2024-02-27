@@ -17,10 +17,12 @@ dependencyResolutionManagement {
 }
 ```
 
-### Paso 3: Añade dependencia en **`build.gradle.kts`** del módulo de nuestra app
+### Paso 2: Añade dependencia en **`build.gradle.kts`** del módulo de nuestra app
 
 ```kotlin
 dependencies {
   implementation("com.github.pmdmiesbalmis:utilities:1.0")
 }
 ```
+
+[![](https://jitpack.io/v/pmdmiesbalmis/utilities.svg)](https://jitpack.io/#pmdmiesbalmis/utilities)
