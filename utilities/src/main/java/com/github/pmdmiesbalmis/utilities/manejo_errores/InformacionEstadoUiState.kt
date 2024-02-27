@@ -1,4 +1,4 @@
-package com.pmdmiesbalmis.utilities.manejo_errores
+package com.github.pmdmiesbalmis.utilities.manejo_errores
 
 sealed class InformacionEstadoUiState(val visible: Boolean, val mensaje: String = "") {
     class Oculta :

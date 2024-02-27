@@ -1,4 +1,4 @@
-package com.pmdmiesbalmis.utilities.validacion
+package com.github.pmdmiesbalmis.utilities.validacion
 
 interface Validacion {
     val hayError: Boolean

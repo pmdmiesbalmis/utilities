@@ -1,4 +1,4 @@
-package com.pmdmiesbalmis.utilities.ui.composables
+package com.github.pmdmiesbalmis.utilities.ui.composables
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size

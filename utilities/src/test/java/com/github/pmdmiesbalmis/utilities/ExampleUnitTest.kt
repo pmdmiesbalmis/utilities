@@ -1,4 +1,4 @@
-package com.pmdmiesbalmis.utilities
+package com.github.pmdmiesbalmis.utilities
 
 import org.junit.Test
 

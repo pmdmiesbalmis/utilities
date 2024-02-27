@@ -1,16 +1,16 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id ("kotlin-parcelize")
     id("maven-publish")
 }
 
 android {
-    namespace = "com.pmdmiesbalmis.utilities"
+    namespace = "com.github.pmdmiesbalmis"
     compileSdk = 34
 
     defaultConfig {
-        minSdk = 34
-
+        minSdk = 28
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -23,6 +23,12 @@ android {
                 "proguard-rules.pro"
             )
         }
+    }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.0"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -53,7 +59,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "com.github.pmdmiesbalmis"
             artifactId = "utilities"
-            version = "1.0.0"
+            version = "1.0"
 
             afterEvaluate {
                 from(components["release"])
@@ -61,5 +67,3 @@ publishing {
         }
     }
 }
-
-// https://github.com/pmdmiesbalmis/utilities.git

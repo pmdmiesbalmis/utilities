@@ -1,4 +1,4 @@
-package com.pmdmiesbalmis.utilities
+package com.github.pmdmiesbalmis.utilities
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

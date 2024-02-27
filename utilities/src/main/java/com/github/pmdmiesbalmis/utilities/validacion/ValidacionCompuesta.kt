@@ -1,4 +1,4 @@
-package com.pmdmiesbalmis.utilities.validacion
+package com.github.pmdmiesbalmis.utilities.validacion
 
 open class ValidacionCompuesta : Validacion {
     private val validaciones = mutableListOf<Validacion>()

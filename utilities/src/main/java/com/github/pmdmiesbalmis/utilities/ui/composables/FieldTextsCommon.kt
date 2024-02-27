@@ -1,4 +1,4 @@
-package com.pmdmiesbalmis.utilities.ui.composables
+package com.github.pmdmiesbalmis.utilities.ui.composables
 
 import android.telephony.PhoneNumberUtils
 import androidx.compose.foundation.text.KeyboardActions
@@ -24,7 +24,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import com.pmdmiesbalmis.utilities.validacion.Validacion
+import com.github.pmdmiesbalmis.utilities.validacion.Validacion
 
 @Composable
 fun TextFieldWithErrorState(
@@ -279,6 +279,31 @@ fun TextFieldEmail(
         },
         validacionState = validacionState,
         onValueChange = { onValueChange(it) }
+    )
+}
+
+@Composable
+fun OutlinedTextFieldEmail(
+    modifier: Modifier = Modifier,
+    label: String = "Email",
+    emailState: String,
+    validacionState: Validacion,
+    onValueChange: (String) -> Unit
+) {
+    OutlinedTextFieldWithErrorState(
+        modifier = modifier,
+        label = label,
+        textoState = emailState,
+        textoPista = "ejemplo@correo.com",
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Filled.Email,
+                contentDescription = "Email"
+            )
+        },
+        validacionState = validacionState,
+        onValueChange = onValueChange
     )
 }
 

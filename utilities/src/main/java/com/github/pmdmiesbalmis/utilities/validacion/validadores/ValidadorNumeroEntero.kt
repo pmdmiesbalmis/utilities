@@ -1,8 +1,8 @@
-package com.pmdmiesbalmis.utilities.validacion.validadores
+package com.github.pmdmiesbalmis.utilities.validacion.validadores
 
 import android.util.Range
-import com.pmdmiesbalmis.utilities.validacion.Validacion
-import com.pmdmiesbalmis.utilities.validacion.Validador
+import com.github.pmdmiesbalmis.utilities.validacion.Validacion
+import com.github.pmdmiesbalmis.utilities.validacion.Validador
 
 class ValidadorNumeroEntero(
     val rango: Range<Int> = Range(0, Int.MAX_VALUE),

@@ -21,6 +21,6 @@ dependencyResolutionManagement {
 
 ```kotlin
 dependencies {
-  implementation("com.github.pmdmiesbalmis:utilities:1.0.0")
+  implementation("com.github.pmdmiesbalmis:utilities:1.0")
 }
 ```
