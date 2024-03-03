@@ -18,6 +18,35 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+/**
+ * Un componente que muestra un checkbox con una etiqueta.
+ *
+ * Puedes probarlo mediante el siguiente código:
+ *
+ * ```
+ * @Preview(showBackground = true, name = "CheckBoxPreview")
+ * @Composable
+ * private fun CheckBoxTest() {
+ *     var checkedState by remember { mutableStateOf(true) }
+ *     Box {
+ *         CheckboxWithLabel(
+ *             label = "I Love Balmis",
+ *             modifier = Modifier
+ *                 .padding(12.dp)
+ *                 .wrapContentWidth(),
+ *             checkedState = checkedState,
+ *             onStateChange = { checkedState = it }
+ *         )
+ *     }
+ * }
+ * ```
+ *
+ * @param label La etiqueta que se mostrará junto al checkbox.
+ * @param modifier El modificador que se aplicará a este componente.
+ * @param checkedState El estado del checkbox.
+ * @param enabledState El estado de habilitación del checkbox.
+ * @param onStateChange La acción que se ejecutará cuando el estado del checkbox cambie.
+ */
 @Composable
 fun CheckboxWithLabel(
     label: String,
@@ -46,7 +75,7 @@ fun CheckboxWithLabel(
 
 @Preview(showBackground = true, name = "CheckBoxPreview")
 @Composable
-fun CheckBoxPreview() {
+private fun CheckBoxTest() {
     var checkedState by remember { mutableStateOf(true) }
     Box {
         CheckboxWithLabel(

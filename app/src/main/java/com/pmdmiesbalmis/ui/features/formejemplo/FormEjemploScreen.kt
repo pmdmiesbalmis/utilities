@@ -1,9 +1,11 @@
 package com.pmdmiesbalmis.ui.features.formejemplo
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,15 +15,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.github.pmdmiesbalmis.utilities.manejo_errores.InformacionEstadoUiState
 import com.github.pmdmiesbalmis.utilities.ui.composables.OutlinedTextFieldEmail
+import com.github.pmdmiesbalmis.utilities.ui.composables.OutlinedTextFieldEntero
 import com.github.pmdmiesbalmis.utilities.ui.composables.OutlinedTextFieldPassword
 import com.github.pmdmiesbalmis.utilities.ui.composables.OutlinedTextFieldPhone
+import com.github.pmdmiesbalmis.utilities.ui.composables.OutlinedTextFieldReal
 import com.github.pmdmiesbalmis.utilities.ui.composables.OutlinedTextFieldWithErrorState
 import com.github.pmdmiesbalmis.utilities.ui.composables.SnackbarError
-import com.github.pmdmiesbalmis.utilities.ui.composables.TextFieldWithErrorState
 import com.pmdmiesbalmis.ui.theme.LibreriaUtilidadesTheme
 
 @Composable
@@ -31,7 +35,9 @@ fun FormEjemploScreen() {
         mutableStateOf(FormEjemploUiState())
     }
     val validadorFormEjemploUiState = remember {
-        ValidadorFormEjemploUiState()
+        ValidadorFormEjemploUiState(
+            mensajeErrorGlobal = "Revisa los errores del formulario"
+        )
     }
     var validacionFormEjemploUiState by remember {
         mutableStateOf(ValidacionFormEjemploUiState())
@@ -49,11 +55,17 @@ fun FormEjemploScreen() {
             }
 
             is FormEjemploEvent.OnChangeEdad -> {
-                val edad = if (e.edad.isEmpty()) "0" else e.edad
                 validacionFormEjemploUiState = validacionFormEjemploUiState.copy(
-                    validacionEdad = validadorFormEjemploUiState.validadorEdad.valida(edad)
+                    validacionEdad = validadorFormEjemploUiState.validadorEdad.valida(e.edad.toString())
                 )
-                formEjemploUiState = formEjemploUiState.copy(edad = edad.toInt())
+                formEjemploUiState = formEjemploUiState.copy(edad = e.edad)
+            }
+
+            is FormEjemploEvent.OnChangeAltura -> {
+                validacionFormEjemploUiState = validacionFormEjemploUiState.copy(
+                    validacionAltura = validadorFormEjemploUiState.validadorAltura.valida(e.altura.toString())
+                )
+                formEjemploUiState = formEjemploUiState.copy(altura = e.altura)
             }
 
             is FormEjemploEvent.OnChangeCorreo -> {
@@ -95,7 +107,7 @@ fun FormEjemploScreen() {
         }
     }
 
-    Column {
+    Column (modifier = Modifier.padding(16.dp)) {
 
         OutlinedTextFieldWithErrorState(
             modifier = Modifier.fillMaxWidth(),
@@ -105,13 +117,22 @@ fun FormEjemploScreen() {
             onValueChange = { onFormEjemploEvent(FormEjemploEvent.OnChangeNombre(it)) }
         )
 
-        TextFieldWithErrorState(
+        OutlinedTextFieldEntero(
             modifier = Modifier.fillMaxWidth(),
             label = "Edad",
-            textoState = formEjemploUiState.edad.toString(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            valorState = formEjemploUiState.edad,
             validacionState = validacionFormEjemploUiState.validacionEdad,
             onValueChange = { onFormEjemploEvent(FormEjemploEvent.OnChangeEdad(it)) }
+        )
+
+        OutlinedTextFieldReal(
+            modifier = Modifier.fillMaxWidth(),
+            label = "Altura",
+            valorState = formEjemploUiState.altura,
+            numeroDecimales = 2,
+            unidades = "m",
+            validacionState = validacionFormEjemploUiState.validacionAltura,
+            onValueChange = { onFormEjemploEvent(FormEjemploEvent.OnChangeAltura(it)) }
         )
 
         OutlinedTextFieldEmail(
@@ -135,7 +156,16 @@ fun FormEjemploScreen() {
             onValueChange = { onFormEjemploEvent(FormEjemploEvent.OnChangeClave(it)) }
         )
 
+        HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
+
+        Button(
+            onClick = { onFormEjemploEvent(FormEjemploEvent.OnAceptar) }
+        ) {
+            Text(text = "Aceptar")
+        }
+
         if (informacionEstadoState is InformacionEstadoUiState.Error) {
+            Spacer(modifier = Modifier.padding(8.dp))
             SnackbarError(
                 mensajeError = informacionEstadoState.mensaje,
                 onDismissError =  {
@@ -143,13 +173,6 @@ fun FormEjemploScreen() {
                     onFormEjemploEvent(FormEjemploEvent.OnDismissError)
                 }
             )
-        }
-
-        Button(
-            onClick = { onFormEjemploEvent(FormEjemploEvent.OnAceptar) },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = "Aceptar")
         }
     }
 }

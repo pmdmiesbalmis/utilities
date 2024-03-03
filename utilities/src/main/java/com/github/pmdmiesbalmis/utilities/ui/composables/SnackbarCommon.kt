@@ -27,31 +27,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.pmdmiesbalmis.utilities.manejo_errores.InformacionEstadoUiState
 
-@Composable
-fun CorrutinaGestionSnackBar(
-    informacionEstado : InformacionEstadoUiState,
-    snackbarHostState: SnackbarHostState
-) {
-    LaunchedEffect(
-        key1 = informacionEstado,
-        block = {
-            when (informacionEstado) {
-                is InformacionEstadoUiState.Informacion -> snackbarHostState.showSnackbar(
-                    message = informacionEstado.mensaje,
-                    duration = SnackbarDuration.Indefinite
-                )
-
-                is InformacionEstadoUiState.Error -> snackbarHostState.showSnackbar(
-                    message = informacionEstado.mensaje,
-                    duration = SnackbarDuration.Indefinite
-                )
-
-                is InformacionEstadoUiState.Oculta -> snackbarHostState.currentSnackbarData?.dismiss()
-            }
-        }
-    )
-}
-
+/**
+ * Composable que emite un Snackbar con un mensaje de error de duración indefinida con un botón para cerrar el Snackbar.
+ *
+ * @param mensajeError El mensaje de error que se mostrará.
+ * @param onDismissError La acción que se ejecutará al cerrar el Snackbar.
+ */
 @Composable
 fun SnackbarError(
     mensajeError: String,
@@ -87,6 +68,13 @@ fun SnackbarError(
     }
 }
 
+/**
+ * Composable que emite un Snackbar con un mensaje de información de duración indefinida.
+ *
+ * @param mensajeInfo El mensaje de información que se mostrará.
+ * @param muestraProgreso Indica si se muestra un CircularProgressIndicator junto al mensaje de información.
+ * @see CircularProgressIndicator
+ */
 @Composable
 fun SnackbarInfo(
     mensajeInfo: String,
@@ -122,8 +110,69 @@ fun SnackbarInfo(
     }
 }
 
+/**
+ * Composable que ejecuta una corrutina para gestionar el estado de un Snackbar que se mostrará en el
+ * SnackbarHost del Scaffold. Funciona en combinación con el composable SnackbarCommon.
+ * Se debe llamar justo antes de emitir un Scaffold que contenga un SnackbarHost de la siguiente forma:
+ *
+ * ```
+ * val snackbarHostState = remember { SnackbarHostState() }
+ *
+ * CorrutinaGestionSnackBar(
+ *      snackbarHostState = snackbarHostState,
+ *      informacionEstado = informacionEstado
+ * )
+ *
+ * Scaffold(
+ *      snackbarHost = {
+ *           SnackbarHost(hostState = snackbarHostState) {
+ *               SnackbarCommon(informacionEstado = informacionEstado)
+ *           }
+ *      }
+ * ) {
+ *      ...
+ * }
+ * ```
+ *
+ * @param informacionEstado El estado de la información que se mostrará en el Snackbar.
+ * @param snackbarHostState El estado del SnackbarHost del Scaffold.
+ * @see SnackbarCommon
+ */
 @Composable
-fun  SnackbarCommon(
+fun CorrutinaGestionSnackBar(
+    informacionEstado : InformacionEstadoUiState,
+    snackbarHostState: SnackbarHostState
+) {
+    LaunchedEffect(
+        key1 = informacionEstado,
+        block = {
+            when (informacionEstado) {
+                is InformacionEstadoUiState.Informacion -> snackbarHostState.showSnackbar(
+                    message = informacionEstado.mensaje,
+                    duration = SnackbarDuration.Indefinite
+                )
+
+                is InformacionEstadoUiState.Error -> snackbarHostState.showSnackbar(
+                    message = informacionEstado.mensaje,
+                    duration = SnackbarDuration.Indefinite
+                )
+
+                is InformacionEstadoUiState.Oculta -> snackbarHostState.currentSnackbarData?.dismiss()
+            }
+        }
+    )
+}
+
+/**
+ * Composable que emite un Snackbar peronalizado en el SnackbarHost del Scaffold
+ * dependiendo del valor de informacionEstado.
+ * Se debe usar en combinación con el composable CorrutinaGestionSnackBar.
+ *
+ * @param informacionEstado El estado de la información que se mostrará en el Snackbar.
+ * @see CorrutinaGestionSnackBar
+ */
+@Composable
+fun SnackbarCommon(
     informacionEstado: InformacionEstadoUiState
 ) {
     when(informacionEstado) {
@@ -150,7 +199,7 @@ fun  SnackbarCommon(
     showBackground = true,
 )
 @Composable
-fun SnackBarErrorPreview() {
+private fun SnackBarErrorPreview() {
     SnackbarError(mensajeError = "Error")
 }
 
@@ -158,6 +207,6 @@ fun SnackBarErrorPreview() {
     showBackground = true,
 )
 @Composable
-fun SnackBarInfoPreview() {
+private fun SnackBarInfoPreview() {
     SnackbarInfo(mensajeInfo = "Cargado...", muestraProgreso = true)
 }

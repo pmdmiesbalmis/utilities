@@ -58,7 +58,7 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:1.6.2")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
 
-    val billOfMaterialsVersion = "2024.02.00"
+    val billOfMaterialsVersion = "2024.02.01"
     implementation(platform("androidx.compose:compose-bom:$billOfMaterialsVersion"))
 
     implementation("androidx.compose.ui:ui")
@@ -77,8 +77,8 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
-    implementation("com.github.pmdmiesbalmis:utilities:1.0")
-    //implementation(project(":utilities"))
+    // implementation("com.github.pmdmiesbalmis:utilities:1.0")
+    implementation(project(":utilities"))
 }
 
 

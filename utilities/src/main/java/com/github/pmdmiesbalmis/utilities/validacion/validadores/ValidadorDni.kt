@@ -4,9 +4,23 @@ import com.github.pmdmiesbalmis.utilities.validacion.Validacion
 import com.github.pmdmiesbalmis.utilities.validacion.Validador
 import java.util.Locale
 
+/**
+ * Validador de DNI.
+ *
+ * @param error Mensaje de error que se mostrará si el DNI no es válido.
+ * @see Validador
+ */
+
 class ValidadorDni(
     val error: String = "El DNI no es válido"
 ) : Validador<String> {
+
+    /**
+     * Valida que el DNI sea válido.
+     *
+     * @return Una validación con error si el DNI no es válido, o una validación vacía si no hay errores.
+     * @sample com.github.pmdmiesbalmis.utilities.validacion.validadores.ValidadorDni.valida
+     */
     override fun valida(texto: String): Validacion {
         val letras = "TRWAGMYFPDXBNJZSQVHLCKE"
         val dni = texto.uppercase(Locale.getDefault())

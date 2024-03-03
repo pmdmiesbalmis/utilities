@@ -18,6 +18,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 
+/**
+ * Un componente que muestra un FilterChip con una etiqueta y un icono.
+ *
+ * Puedes probarlo mediante el siguiente código:
+ *
+ * ```
+ * @Preview(
+ *     showBackground = true,
+ * )
+ * @Composable
+ * private fun FilterChipTest() {
+ *     var selected by remember { mutableStateOf(true) }
+ *     FilterChipWithIcon(
+ *         seleccionadoState = selected,
+ *         textoState = "Filtro",
+ *         iconState = Icons.Filled.FilterAlt,
+ *         onClick = { selected = !selected }
+ *     )
+ * }
+ * ```
+ *
+ * @param seleccionadoState El estado del FilterChip.
+ * @param textoState La etiqueta que se mostrará en el FilterChip.
+ * @param iconState El icono que se mostrará en el FilterChip.
+ * @param onClick La acción que se ejecutará cuando el FilterChip se haga clic.
+ */
+
 @Composable
 fun FilterChipWithIcon(
     modifier: Modifier = Modifier,
@@ -56,7 +83,7 @@ fun FilterChipWithIcon(
     showBackground = true,
 )
 @Composable
-fun FilterChipTest() {
+private fun FilterChipTest() {
     var selected by remember { mutableStateOf(true) }
     FilterChipWithIcon(
         seleccionadoState = selected,

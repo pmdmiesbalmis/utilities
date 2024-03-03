@@ -5,7 +5,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Visibility
@@ -18,9 +18,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -44,13 +43,21 @@ fun TextFieldWithErrorState(
         onValueChange = onValueChange,
         singleLine = true,
         leadingIcon = leadingIcon,
+        trailingIcon = {
+            if (validacionState.hayError) {
+                Icon(
+                    imageVector = Icons.Filled.Error,
+                    contentDescription = "Error"
+                )
+            }
+        },
         placeholder = {
             Text(
                 text = textoPista,
                 style = TextStyle(color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
             )
         },
-        label = { Text(if (validacionState.hayError) "${label}*" else label) },
+        label = { Text(label) },
         keyboardOptions = keyboardOptions,
         supportingText = {
             if (validacionState.hayError) {
@@ -80,13 +87,21 @@ fun OutlinedTextFieldWithErrorState(
         onValueChange = onValueChange,
         singleLine = true,
         leadingIcon = leadingIcon,
+        trailingIcon = {
+            if (validacionState.hayError) {
+                Icon(
+                    imageVector = Icons.Filled.Error,
+                    contentDescription = "Error"
+                )
+            }
+        },
         placeholder = {
             Text(
                 text = textoPista,
                 style = TextStyle(color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
             )
         },
-        label = { Text(if (validacionState.hayError) "${label}*" else label) },
+        label = { Text(label) },
         keyboardOptions = keyboardOptions,
         supportingText = {
             if (validacionState.hayError) {
@@ -106,8 +121,7 @@ fun TextFieldPassword(
     onValueChange: (String) -> Unit,
     label: String = "Clave",
     labelShow: String = "Muestra clave",
-    labelHide: String = "Oculta clave",
-    iconoInformativo: Painter = rememberVectorPainter(image = Icons.Filled.Lock),
+    labelHide: String = "Oculta clave"
 ) {
     var passwordHidden by remember { mutableStateOf(true) }
     TextField(
@@ -115,7 +129,7 @@ fun TextFieldPassword(
         value = passwordState,
         onValueChange = onValueChange,
         singleLine = true,
-        label = { Text(if (validacionState.hayError) "${label}*" else label) },
+        label = { Text(label) },
         supportingText = {
             if (validacionState.hayError) {
                 Text(text = validacionState.mensajeError!!)
@@ -126,17 +140,19 @@ fun TextFieldPassword(
         if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         leadingIcon = {
-            Icon(
-                painter = iconoInformativo,
-                contentDescription = label
-            )
-        },
-        trailingIcon = {
             IconButton(onClick = { passwordHidden = !passwordHidden }) {
                 val visibilityIcon =
                     if (passwordHidden) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
                 val description = if (passwordHidden) labelShow else labelHide
                 Icon(imageVector = visibilityIcon, contentDescription = description)
+            }
+        },
+        trailingIcon = {
+            if (validacionState.hayError) {
+                Icon(
+                    imageVector = Icons.Filled.Error,
+                    contentDescription = "Error"
+                )
             }
         }
     )
@@ -150,8 +166,7 @@ fun OutlinedTextFieldPassword(
     onValueChange: (String) -> Unit,
     label: String = "Clave",
     labelShow: String = "Muestra clave",
-    labelHide: String = "Oculta clave",
-    iconoInformativo: Painter = rememberVectorPainter(image = Icons.Filled.Lock),
+    labelHide: String = "Oculta clave"
 ) {
     var passwordHidden by remember { mutableStateOf(true) }
     OutlinedTextField(
@@ -159,7 +174,7 @@ fun OutlinedTextFieldPassword(
         value = passwordState,
         onValueChange = onValueChange,
         singleLine = true,
-        label = { Text(if (validacionState.hayError) "${label}*" else label) },
+        label = { Text(label) },
         supportingText = {
             if (validacionState.hayError) {
                 Text(text = validacionState.mensajeError!!)
@@ -170,17 +185,19 @@ fun OutlinedTextFieldPassword(
         if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         leadingIcon = {
-            Icon(
-                painter = iconoInformativo,
-                contentDescription = label
-            )
-        },
-        trailingIcon = {
             IconButton(onClick = { passwordHidden = !passwordHidden }) {
                 val visibilityIcon =
                     if (passwordHidden) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
                 val description = if (passwordHidden) labelShow else labelHide
                 Icon(imageVector = visibilityIcon, contentDescription = description)
+            }
+        },
+        trailingIcon = {
+            if (validacionState.hayError) {
+                Icon(
+                    imageVector = Icons.Filled.Error,
+                    contentDescription = "Error"
+                )
             }
         }
     )
@@ -332,5 +349,82 @@ fun OutlinedTextFieldName(
     )
 }
 
+@Composable
+fun OutlinedTextFieldEntero(
+    modifier: Modifier = Modifier,
+    label: String,
+    unidades: String? = null,
+    valorState: Int,
+    textoPista: String = "Introduce un valor entero",
+    validacionState: Validacion,
+    keyboardActions: KeyboardActions = KeyboardActions(),
+    onValueChange: (Int) -> Unit
+) {
+    OutlinedTextFieldWithErrorState(
+        modifier = modifier,
+        label = label,
+        textoState = valorState.toString(),
+        textoPista = textoPista,
+        leadingIcon = unidades?.let {
+            @Composable {
+                TextoUnidades(unidades = it)
+            }
+        },
+        validacionState = validacionState,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        keyboardActions = keyboardActions,
+        onValueChange = {
+            if (it.isNotEmpty()) {
+                if (it.matches(Regex("^[+-]?[0-9]+$")))
+                    onValueChange(it.toInt())
+            } else {
+                onValueChange(0)
+            }
+        }
+    )
+}
 
+@Composable
+private fun TextoUnidades(unidades: String) {
+    Text(
+        text = unidades,
+        fontWeight = FontWeight.Bold
+    )
+}
+
+@Composable
+fun OutlinedTextFieldReal(
+    modifier: Modifier = Modifier,
+    label: String,
+    valorState: Double,
+    numeroDecimales: Int = 1,
+    unidades: String? = null,
+    textoPista: String = "Introduce un valor real",
+    validacionState: Validacion,
+    keyboardActions: KeyboardActions = KeyboardActions(),
+    onValueChange: (Double) -> Unit
+) {
+    OutlinedTextFieldWithErrorState(
+        modifier = modifier,
+        label = label,
+        textoState = "%.${numeroDecimales}f".format(valorState),
+        textoPista = textoPista,
+        leadingIcon = unidades?.let {
+            @Composable {
+                TextoUnidades(unidades = it)
+            }
+        },
+        validacionState = validacionState,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+        keyboardActions = keyboardActions,
+        onValueChange = {
+            if (it.isNotEmpty()) {
+                if (it.matches(Regex("^[+-]?[0-9]+(\\.[0-9]+)?$")))
+                    onValueChange(it.toDouble())
+            } else {
+                onValueChange(0.0)
+            }
+        }
+    )
+}
 
