@@ -22,12 +22,12 @@ class ValidadorNumeroEntero(
      * @return Una validación con error si el texto no es un número entero, o una validación vacía si no hay errores.
      * @sample com.github.pmdmiesbalmis.utilities.validacion.validadores.ValidadorNumeroEntero.valida
      */
-    override fun valida(texto: String): Validacion {
+    override fun valida(datos: String): Validacion {
         return object : Validacion {
             override val hayError: Boolean
-                get() = !texto.matches(Regex("^[+-]?[0-9]+$"))
+                get() = !datos.matches(Regex("^[+-]?[0-9]+$"))
                         ||
-                        !rango.contains(texto.toInt())
+                        !rango.contains(datos.toInt())
             override val mensajeError: String
                 get() = error
         }

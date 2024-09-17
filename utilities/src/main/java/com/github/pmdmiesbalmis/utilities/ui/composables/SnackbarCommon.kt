@@ -6,10 +6,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Cancel
-import androidx.compose.material.icons.filled.Error
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -23,9 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.pmdmiesbalmis.utilities.manejo_errores.InformacionEstadoUiState
+import com.github.pmdmiesbalmis.utilities.ui.icons.Filled
 
 /**
  * Composable que emite un Snackbar con un mensaje de error de duración indefinida con un botón para cerrar el Snackbar.
@@ -47,7 +45,7 @@ fun SnackbarError(
                 onClick = onDismissError,
             ) {
                 Icon(
-                    imageVector = Icons.Default.Cancel,
+                    painter = Filled.getCancelIcon(),
                     contentDescription = "Cancelar",
                     modifier = Modifier.size(ButtonDefaults.IconSize),
                 )
@@ -58,7 +56,7 @@ fun SnackbarError(
             verticalAlignment = Alignment.CenterVertically
         ){
             Icon(
-                imageVector = Icons.Default.Error,
+                painter = Filled.getErrorIcon(),
                 contentDescription = "Error",
                 modifier = Modifier.size(ButtonDefaults.IconSize),
             )
@@ -89,7 +87,7 @@ fun SnackbarInfo(
             verticalAlignment = Alignment.CenterVertically
         ){
             Icon(
-                imageVector = Icons.Default.Info,
+                painter = Filled.getInfoIcon(),
                 contentDescription = "Información",
                 modifier = Modifier.size(ButtonDefaults.IconSize),
             )

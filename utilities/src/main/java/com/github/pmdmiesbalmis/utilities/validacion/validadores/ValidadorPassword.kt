@@ -21,10 +21,10 @@ class ValidadorPassword(
      * @return Una validación con error si la contraseña no cumple los requisitos, o una validación vacía si no hay errores.
      * @sample com.github.pmdmiesbalmis.utilities.validacion.validadores.ValidadorPassword.valida
      */
-    override fun valida(texto: String): Validacion {
+    override fun valida(datos: String): Validacion {
         return object : Validacion {
             override val hayError: Boolean
-                get() = !Regex("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=_])(?=\\S+$).{8,}$").matches(texto)
+                get() = !Regex("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=_])(?=\\S+$).{8,}$").matches(datos)
 
             override val mensajeError: String
                 get() = error

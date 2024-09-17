@@ -2,9 +2,6 @@ package com.github.pmdmiesbalmis.utilities.ui.composables
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
@@ -15,8 +12,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.github.pmdmiesbalmis.utilities.ui.icons.Filled
 
 /**
  * Un componente que muestra un FilterChip con una etiqueta y un icono.
@@ -50,7 +50,7 @@ fun FilterChipWithIcon(
     modifier: Modifier = Modifier,
     seleccionadoState: Boolean = true,
     textoState : String = "Etiqueta",
-    iconState : ImageVector? = null,
+    iconState : Painter? = null,
     onClick : () -> Unit = {}
 ) {
     FilterChip(
@@ -61,14 +61,14 @@ fun FilterChipWithIcon(
         leadingIcon = {
             if (seleccionadoState) {
                 Icon(
-                    imageVector = Icons.Filled.Done,
+                    painter = Filled.getCheckIcon(),
                     contentDescription = "Icono seleccionado",
                     modifier = Modifier.size(FilterChipDefaults.IconSize)
                 )
             } else {
                 iconState?.let {
                     Icon(
-                        imageVector = it,
+                        painter = it,
                         contentDescription = "Icono asociado a la etiqueta",
                         modifier = Modifier.size(FilterChipDefaults.IconSize)
                     )
@@ -88,7 +88,7 @@ private fun FilterChipTest() {
     FilterChipWithIcon(
         seleccionadoState = selected,
         textoState = "Filtro",
-        iconState = Icons.Filled.FilterAlt,
+        iconState = Filled.getFilterAltIcon(),
         onClick = { selected = !selected }
     )
 }

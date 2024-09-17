@@ -21,9 +21,9 @@ class ValidadorDni(
      * @return Una validación con error si el DNI no es válido, o una validación vacía si no hay errores.
      * @sample com.github.pmdmiesbalmis.utilities.validacion.validadores.ValidadorDni.valida
      */
-    override fun valida(texto: String): Validacion {
+    override fun valida(datos: String): Validacion {
         val letras = "TRWAGMYFPDXBNJZSQVHLCKE"
-        val dni = texto.uppercase(Locale.getDefault())
+        val dni = datos.uppercase(Locale.getDefault())
         var hayError = dni.length != 9 || !dni.matches(Regex("[0-9]{8}[A-Z]"))
         if (!hayError) {
             val letra = dni.substring(8, 9)

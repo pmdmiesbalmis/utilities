@@ -21,10 +21,10 @@ class ValidadorLongitudMinimaTexto(
      * @return Una validación con error si el texto no tiene al menos el tamaño mínimo, o una validación vacía si no hay errores.
      * @sample com.github.pmdmiesbalmis.utilities.validacion.validadores.ValidadorLongitudMinimaTexto.valida
      */
-    override fun valida(texto: String): Validacion {
+    override fun valida(datos: String): Validacion {
         return object : Validacion {
             override val hayError: Boolean
-                get() = texto.length < tamañoMinimo
+                get() = datos.length < tamañoMinimo
             override val mensajeError: String
                 get() = error
         }

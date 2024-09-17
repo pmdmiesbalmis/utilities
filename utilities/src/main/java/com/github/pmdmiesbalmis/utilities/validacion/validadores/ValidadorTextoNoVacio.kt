@@ -19,10 +19,10 @@ class ValidadorTextoNoVacio(
      * @return Una validación con error si el texto está vacío, o una validación vacía si no hay errores.
      * @sample com.github.pmdmiesbalmis.utilities.validacion.validadores.ValidadorTextoNoVacio.valida
      */
-    override fun valida(texto: String): Validacion {
+    override fun valida(datos: String): Validacion {
         return object : Validacion {
             override val hayError: Boolean
-                get() = texto.isEmpty()
+                get() = datos.isEmpty()
             override val mensajeError: String
                 get() = error
         }

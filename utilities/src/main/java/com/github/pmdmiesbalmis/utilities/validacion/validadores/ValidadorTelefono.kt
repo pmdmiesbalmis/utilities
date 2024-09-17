@@ -19,10 +19,10 @@ class ValidadorTelefono(
      * @return Una validación con error si el teléfono no tiene entre 9 y 18 dígitos, o una validación vacía si no hay errores.
      * @sample com.github.pmdmiesbalmis.utilities.validacion.validadores.ValidadorTelefono.valida
      */
-    override fun valida(texto: String): Validacion {
+    override fun valida(datos: String): Validacion {
         return object : Validacion {
             override val hayError: Boolean
-                get() = !Regex("^[0-9 ]{9,18}$").matches(texto)
+                get() = !Regex("^[0-9 ]{9,18}$").matches(datos)
             override val mensajeError: String
                 get() = error
         }

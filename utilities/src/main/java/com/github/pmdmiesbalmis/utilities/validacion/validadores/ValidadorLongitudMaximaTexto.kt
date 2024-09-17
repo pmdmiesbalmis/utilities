@@ -21,10 +21,10 @@ class ValidadorLongitudMaximaTexto(
      * @return Una validación con error si el texto supera el tamaño máximo, o una validación vacía si no hay errores.
      * @sample com.github.pmdmiesbalmis.utilities.validacion.validadores.ValidadorLongitudMaximaTexto.valida
      */
-    override fun valida(texto: String): Validacion {
+    override fun valida(datos: String): Validacion {
         return object : Validacion {
             override val hayError: Boolean
-                get() = texto.length > tamañoMaximo
+                get() = datos.length > tamañoMaximo
             override val mensajeError: String
                 get() = error
         }
