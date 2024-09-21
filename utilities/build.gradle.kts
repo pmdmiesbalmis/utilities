@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-//    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.compose.compiler)
     id("maven-publish")
 }
 
@@ -26,9 +26,6 @@ android {
     }
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -62,7 +59,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "com.github.pmdmiesbalmis"
             artifactId = "utilities"
-            version = "24.0"
+            version = "24.1"
 
             afterEvaluate {
                 from(components["release"])
