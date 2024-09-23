@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.net.Uri
 import android.provider.ContactsContract
 import android.provider.MediaStore
@@ -16,19 +15,17 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
+import com.github.pmdmiesbalmis.utilities.imagetools.imageBitmapFromUri
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 
-
-private fun Context.toImageBitmap(uri: Uri): ImageBitmap {
-    val contextResolver = this.contentResolver
-    val source = ImageDecoder.createSource(contextResolver, uri)
-    return ImageDecoder.decodeBitmap(source).asImageBitmap()
-}
-
-// Uso:
-//      slectorDeImagenes.launch("image/*")
+/**
+ * Lanza un intent para seleccionar una imagen.
+ * @param onFotoCambiada La función que se ejecutará cuando se haya seleccionado la imagen.
+ * @return El registro de la selección.
+ * @sample slectorDeImagenes.launch("image/\*")
+ */
 @Composable
 fun registroSelectorDeImagenesConGetContent(
     onFotoCambiada: (ImageBitmap) -> Unit
@@ -36,37 +33,41 @@ fun registroSelectorDeImagenesConGetContent(
     val context = LocalContext.current
     return rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
-            onFotoCambiada(context.toImageBitmap(uri))
+            context.imageBitmapFromUri(uri)?.let {
+                onFotoCambiada(it)
+            }
         }
     }
 }
 
-// Para hacer fotos con TakePicture, hay que añadir en el manifest:
-// <uses-feature
-//      android:name="android.hardware.camera.any"
-//      android:required="true" />
-// <uses-permission android:name="android.permission.CAMERA" />
-//
-// En el manifest, dentro de <application>:
-// <provider
-//     android:name="androidx.core.content.FileProvider"
-//     android:authorities="${applicationId}.provider"
-//     android:exported="false"
-//     android:grantUriPermissions="true">
-//     <meta-data
-//         android:name="android.support.FILE_PROVIDER_PATHS"
-//         android:resource="@xml/path_provider" />
-// </provider>
-//
-// En res/xml/path_provider.xml:
-// <?xml version="1.0" encoding="utf-8"?>
-// <paths>
-//     <external-cache-path
-//         name="my_images"
-//         path="/"/>
-// </paths>
-// Uso:
-//      hacerFoto.launch(android.Manifest.permission.CAMERA)
+/**
+ * Lanza un registro de permisos y, si se conceden, lanza un intent para hacer una foto.
+ * Para hacer fotos con TakePicture, hay que añadir en el manifest:
+ * <uses-feature
+ *      android:name="android.hardware.camera.any"
+ *      android:required="true" />
+ * <uses-permission android:name="android.permission.CAMERA" />
+ * En el manifest, dentro de <application>:
+ * <provider
+ *     android:name="androidx.core.content.FileProvider"
+ *     android:authorities="${applicationId}.provider"
+ *     android:exported="false"
+ *     android:grantUriPermissions="true">
+ *     <meta-data
+ *         android:name="android.support.FILE_PROVIDER_PATHS"
+ *         android:resource="@xml/path_provider" />
+ * </provider>
+ * En res/xml/path_provider.xml:
+ * <?xml version="1.0" encoding="utf-8"?>
+ * <paths>
+ *     <external-cache-path
+ *         name="my_images"
+ *         path="/"/>
+ * </paths>
+ * @param onFotoCambiada La función que se ejecutará cuando se haya hecho la foto.
+ * @return El registro de permisos.
+ * @sample hacerFoto.launch(android.Manifest.permission.CAMERA)
+ */
 @Composable
 fun registroHacerFotoConTakePicture(
     onFotoCambiada: (ImageBitmap) -> Unit
@@ -86,7 +87,9 @@ fun registroHacerFotoConTakePicture(
     val cameraLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             if (success) {
-                onFotoCambiada(context.toImageBitmap(uri))
+                context.imageBitmapFromUri(uri)?.let {
+                    onFotoCambiada(it)
+                }
             }
         }
     return rememberLauncherForActivityResult(
@@ -98,45 +101,50 @@ fun registroHacerFotoConTakePicture(
     }
 }
 
-// Para hacer fotos con el intent de la cámara, hay que añadir en el manifest:
-// <uses-feature
-//      android:name="android.hardware.camera.any"
-//      android:required="true" />
-// <uses-permission android:name="android.permission.CAMERA" />
-// Uso:
-//      hacerFoto.launch(android.Manifest.permission.CAMERA)
+/**
+ * Lanza un registro de permisos y, si se conceden, lanza un intent para hacer una foto.
+ * Para hacer fotos con el intent de la cámara, hay que añadir en el manifest:
+ * <uses-feature
+ *      android:name="android.hardware.camera.any"
+ *      android:required="true" />
+ * <uses-permission android:name="android.permission.CAMERA" />
+ * @param onFotoCambiada La función que se ejecutará cuando se haya hecho la foto.
+ * @return El registro de permisos.
+ * @sample hacerFoto.launch(android.Manifest.permission.CAMERA)
+ */
 @Composable
 fun registroHacerFotoConIntent(
     onFotoCambiada: (ImageBitmap) -> Unit
 ): ManagedActivityResultLauncher<String, Boolean> {
-    val cameraLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            (result.data?.extras?.get("data") as? Bitmap)?.let { bitmap ->
-                onFotoCambiada(bitmap.asImageBitmap())
+    val cameraLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val androidBitmap = result.data?.extras?.get("data") as Bitmap
+                onFotoCambiada(androidBitmap!!.asImageBitmap())
             }
         }
-    }
 
     return rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        isGranted.takeIf { it }?.let {
+        ActivityResultContracts.RequestPermission()
+    ) { success ->
+        if (success) {
             val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE)
             cameraLauncher.launch(cameraIntent)
         }
     }
 }
 
-
-// Para hacer llamadas telefónicas, hay que añadir en el manifest:
-// <uses-feature
-//      android:name="android.hardware.telephony"
-//      android:required="true" />
-// <uses-permission android:name="android.permission.CALL_PHONE"/>
-// Uso:
-//      telefono.launch(android.Manifest.permission.CALL_PHONE)
+/**
+ * Lanza un registro de permisos y, si se conceden, lanza un intent para hacer una llamada telefónica.
+ * Para hacer llamadas telefónicas, hay que añadir en el manifest:
+ * <uses-feature
+ *      android:name="android.hardware.telephony"
+ *      android:required="true" />
+ * <uses-permission android:name="android.permission.CALL_PHONE"/>
+ * @param telefono El número de teléfono al que se llamará.
+ * @return El registro de permisos.
+ * @sample telefono.launch(android.Manifest.permission.CALL_PHONE)
+ */
 @Composable
 fun registroLlamarPorTelefonoIntent(
     telefono: String
@@ -175,16 +183,14 @@ fun Context.enviarMail(
     }
 }
 
-// Para hacer llamadas telefónicas, hay que añadir en el manifest:
-// <uses-permission android:name="android.permission.READ_CONTACTS/>
-// Uso:
-//      val registroSeleccionContacto
-//          = registroSelectorTelefonoContacto { telefono ->
-//              ...
-//      }
-//      ...
-//      registroSeleccionContacto.launch(android.Manifest.permission.READ_CONTACTS)
-
+/**
+ * Lanza un registro de permisos y, si se conceden, lanza un intent para seleccionar un contacto de la agenda.
+ * Para seleccionar un contacto de la agenda, hay que añadir en el manifest:
+ * <uses-permission android:name="android.permission.READ_CONTACTS"/>
+ * @param onSeleccionNumeroContacto La función que se ejecutará cuando se haya seleccionado el contacto.
+ * @return El registro de permisos.
+ * @sample registroSeleccionContacto.launch(android.Manifest.permission.READ_CONTACTS)
+ */
 @Composable
 fun registroSelectorTelefonoContacto(
     onSeleccionNumeroContacto: (String) -> Unit

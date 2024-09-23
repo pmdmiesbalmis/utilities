@@ -66,7 +66,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    // implementation("com.github.pmdmiesbalmis:utilities:1.0")
     implementation(project(":utilities"))
 }
 
